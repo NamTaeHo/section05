@@ -5,6 +5,7 @@
 // 4. 자기소개
 
 import { useState } from "react";
+import { useRef } from "react";
 
 const Register = () => {
   const [input, setInput] = useState({
@@ -14,21 +15,31 @@ const Register = () => {
     bio: "",
   });
 
-  console.log(input);
+  const countRef = useRef(0);
+  const inputRef = useRef();
 
   const onChange = (e) => {
-    console.log(e);
-    console.log(e.target.name, e.target.value);
+    countRef.current++;
+    console.log(countRef.current);
+
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
   };
 
+  const onSubmit = () => {
+    if (input.name === "") {
+      //이름을 입력하는 DOM 요소 포커스
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <div>
       <div>
         <input
+          ref={inputRef}
           name="name"
           value={input.name}
           onChange={onChange}
@@ -61,6 +72,8 @@ const Register = () => {
         <textarea name="bio" onChange={onChange} value={input.bio} />
         {input.bio}
       </div>
+
+      <button onClick={onSubmit}>제출</button>
     </div>
   );
 };
